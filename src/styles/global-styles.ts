@@ -18,8 +18,8 @@ export default createGlobalStyle`
   h4,
   h5,
   h6 {
-    font-family: ${theme.fonts.text};
-    font-weight: 600;
+    font-family: ${theme.fonts.title};
+    font-weight: 700;
     margin: 0;
   }
   a {
@@ -40,11 +40,21 @@ export const Page = styled.main`
 `;
 
 export const PageHeader = styled.header`
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 
+  img {
+    display: block;
+    height: 56px;
+    width: auto;
+    margin-bottom: 24px;
+  }
   h1 {
     font-size: 28px;
     color: ${theme.colors.title};
+
+    span {
+      color: ${theme.colors.accent};
+    }
   }
   p {
     margin-top: 8px;
@@ -55,7 +65,7 @@ export const PageHeader = styled.header`
 `;
 
 export const Card = styled.section`
-  background-color: #ffffff;
+  background-color: ${theme.colors.surface};
   border: 1px solid ${theme.colors.border};
   border-radius: 8px;
   overflow: hidden;

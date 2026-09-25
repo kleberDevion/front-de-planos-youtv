@@ -5,18 +5,16 @@ import CircularProgress from '@mui/material/CircularProgress';
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import MaskedInput from '../../styles/MaskedInput';
-import { Provider } from '../../infra/services/types';
-import { isValidCpf } from '../../utils/cpf';
+import { sanitizeCpf } from '../../utils/cpf';
+import { PROVIDERS } from './providers';
 
 export interface ProviderCpfValue {
-  providerId: string;
+  provider: string;
   /** CPF com máscara, como aparece no campo. */
   cpf: string;
 }
 
 interface ProviderCpfFormProps {
-  providers: Provider[];
-  providersLoading: boolean;
   value: ProviderCpfValue;
   onChange: (value: ProviderCpfValue) => void;
   submitLabel: string;
@@ -34,8 +32,6 @@ const Form = styled.form`
 `;
 
 function ProviderCpfForm({
-  providers,
-  providersLoading,
   value,
   onChange,
   submitLabel,
@@ -44,13 +40,14 @@ function ProviderCpfForm({
 }: ProviderCpfFormProps) {
   const [submitted, setSubmitted] = useState(false);
 
-  const providerError = submitted && !value.providerId;
-  const cpfError = submitted && !isValidCpf(value.cpf);
+  const cpfFilled = sanitizeCpf(value.cpf).length === 11;
+  const providerError = submitted && !value.provider;
+  const cpfError = submitted && !cpfFilled;
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault();
     setSubmitted(true);
-    if (!value.providerId || !isValidCpf(value.cpf)) return;
+    if (!value.provider || !cpfFilled) return;
     onSubmit();
   }
 
@@ -59,20 +56,18 @@ function ProviderCpfForm({
       <TextField
         select
         label="Qual é o seu provedor?"
-        value={value.providerId}
-        onChange={(event) => onChange({ ...value, providerId: event.target.value })}
-        disabled={loading || providersLoading}
-        error={providerError}
-        helperText={
-          (providersLoading && 'Carregando provedores...') ||
-          (providerError && 'Selecione o seu provedor.') ||
-          ' '
+        value={value.provider}
+        onChange={(event) =>
+          onChange({ ...value, provider: event.target.value })
         }
+        disabled={loading}
+        error={providerError}
+        helperText={providerError ? 'Selecione o seu provedor.' : ' '}
         fullWidth
       >
-        {providers.map((provider) => (
-          <MenuItem key={provider.id} value={provider.id}>
-            {provider.name}
+        {PROVIDERS.map((provider) => (
+          <MenuItem key={provider} value={provider}>
+            {provider}
           </MenuItem>
         ))}
       </TextField>
@@ -85,7 +80,7 @@ function ProviderCpfForm({
         onChange={(event) => onChange({ ...value, cpf: event.target.value })}
         disabled={loading}
         error={cpfError}
-        helperText={cpfError ? 'Informe um CPF válido.' : ' '}
+        helperText={cpfError ? 'Preencha o CPF.' : ' '}
         inputProps={{ inputMode: 'numeric' }}
         fullWidth
       />
@@ -95,8 +90,10 @@ function ProviderCpfForm({
         size="large"
         variant="contained"
         className="submitButton"
-        disabled={loading || providersLoading}
-        startIcon={loading ? <CircularProgress size={20} color="inherit" /> : undefined}
+        disabled={loading}
+        startIcon={
+          loading ? <CircularProgress size={20} color="inherit" /> : undefined
+        }
       >
         {loading ? 'Aguarde...' : submitLabel}
       </Button>

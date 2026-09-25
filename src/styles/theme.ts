@@ -1,15 +1,20 @@
+// Identidade da YouTV Digital (youtvdigital.com.br): cores do logo e fontes do site.
 const theme = {
   colors: {
-    primary: '#198754',
-    primaryLight: '#E3F4EB',
+    primary: '#7DC523',
+    accent: '#F7F300',
 
-    title: '#1C1C1B',
-    text: '#8692A6',
-    border: '#E4E4E4',
-    background: '#F7F8FA',
+    background: '#0E0F12',
+    surface: '#17191E',
+    border: '#2A2D34',
+
+    title: '#FFFFFF',
+    text: '#B4B8C2',
+    onPrimary: '#0E0F12',
   },
   fonts: {
-    text: "'Inter', sans-serif;",
+    title: "'Montserrat', sans-serif",
+    text: "'Open Sans', sans-serif",
   },
   gridSystem: '720px',
 };

@@ -1,17 +1,41 @@
 import * as React from 'react';
 import type { AppProps } from 'next/app';
 import { ThemeProvider } from 'styled-components';
-import { createTheme, ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
+import {
+  createTheme,
+  ThemeProvider as MuiThemeProvider,
+} from '@mui/material/styles';
 import GlobalStyle from '../styles/global-styles';
 import theme from '../styles/theme';
 
 const muiTheme = createTheme({
   palette: {
-    primary: { main: theme.colors.primary },
+    mode: 'dark',
+    primary: {
+      main: theme.colors.primary,
+      contrastText: theme.colors.onPrimary,
+    },
+    secondary: {
+      main: theme.colors.accent,
+      contrastText: theme.colors.onPrimary,
+    },
+    background: {
+      default: theme.colors.background,
+      paper: theme.colors.surface,
+    },
+    text: {
+      primary: theme.colors.title,
+      secondary: theme.colors.text,
+    },
+    divider: theme.colors.border,
   },
   typography: {
-    fontFamily: "'Inter', sans-serif",
-    button: { textTransform: 'none', fontWeight: 600 },
+    fontFamily: theme.fonts.text,
+    button: {
+      fontFamily: theme.fonts.title,
+      textTransform: 'none',
+      fontWeight: 700,
+    },
   },
 });
 
